@@ -1,0 +1,38 @@
+What is Dynamic Binding (or Dynamic Dispatch)?
+    Dynamic binding (also known as dynamic dispatch) refers to the process where the function 
+    that gets executed is determined at runtime, not at compile time. In C++, this typically happens when:
+
+You call a virtual function using a base class pointer or reference that points to a derived class object.
+ex : 
+Animal* animal1 = new Dog(); (refer to Virtual1.cpp)
+Animal* animal2 = new Cat();
+
+Here, animal1 is a pointer of type Animal*, but it actually points to an object of type Dog.
+Similarly, animal2 is a pointer of type Animal*, but it actually points to an object of type Cat.
+
+Dynamic Binding in Action
+    Dynamic binding occurs when you call a virtual function on these pointers, like so:
+    animal1->speak();  // Calls Dog's version of speak()
+    animal2->speak();  // Calls Cat's version of speak()
+
+animal1->speak(): Since speak() is a virtual function in the base class Animal, 
+                  C++ will perform dynamic binding at runtime. Even though animal1 is of type Animal*, it actually points to a Dog object, so Dog's overridden version of speak() will be called.
+animal2->speak(): Similarly, animal2 is of type Animal*, but it points to a Cat object. 
+                  At runtime, dynamic binding ensures that Cat's version of speak() is called.
+                
+
+How Does Dynamic Binding Work?
+    Virtual Function Table (Vtable): When a function is marked as virtual in the base class, 
+    the compiler sets up a virtual table (vtable). The vtable is an array of function pointers, one for each virtual function.
+
+    The vtable for Dog will point to Dog::speak().
+    The vtable for Cat will point to Cat::speak().
+    At Runtime: When the program calls animal1->speak(), the actual function that gets called
+    is determined based on the actual object type (i.e., Dog). This lookup happens through the vtable at runtime.
+
+Visual Representation
+    At Compile Time:
+        The compiler knows that animal1 is a pointer to Animal and has a speak() method.
+        The compiler sets up the call to speak() as a virtual function call.
+    At Runtime:
+        When animal1->speak() is executed, C++ checks the actual object type (Dog), looks up the function in the vtable, and calls the correct version of speak() (i.e., Dog::speak()).
